@@ -1,0 +1,37 @@
+sudo apt update -y
+
+git clone https://github.com/N4si/DevSecOps-Project.git
+
+cd DevSecOps-Project
+
+sudo apt-get update
+sudo apt-get install docker.io -y
+sudo usermod -aG docker $USER  # Replace with your system's username, e.g., 'ubuntu'
+newgrp docker
+sudo chmod 777 /var/run/docker.sock
+
+docker build -t netflix .
+docker run -d --name netflix -p 8081:80 netflix:latest
+
+#to delete
+docker ps (copy the id)
+docker stop <containerid>
+docker rmi -f netflix
+
+docker build --build-arg TMDB_V3_API_KEY=9b9a0a61d4e5087cf0f3525be85dd2af -t netflix .
+
+docker run -d --name netflix -p 8081:80 netflix:latest
+
+-------------SECURITY------------------------------------------------------------------
+
+To install Trivy:
+
+sudo apt-get install wget apt-transport-https gnupg lsb-release
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update
+sudo apt-get install trivy        
+
+to scan :  trivy image Netflix
+
+to scan all files : trivey fs .
